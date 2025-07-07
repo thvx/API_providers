@@ -1,0 +1,125 @@
+@DiligenciaProveedores_HostAddress = http://localhost:5003
+@DiligenciaProveedores_HostAddress_Https = https://localhost:7220
+
+### Variables
+@token = {{auth_login.response.body.token}}
+@providerId = {{create_provider.response.body.id}}
+
+#####################################
+### 🔐 AUTENTICACIÓN
+#####################################
+
+### Login para obtener token JWT
+# @name auth_login
+POST {{DiligenciaProveedores_HostAddress}}/api/Auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "password123"
+}
+
+#####################################
+### 🏢 PROVEEDORES
+#####################################
+
+### Obtener todos los proveedores
+GET {{DiligenciaProveedores_HostAddress}}/api/Providers
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+
+### Obtener proveedor por ID
+GET {{DiligenciaProveedores_HostAddress}}/api/Providers/{{providerId}}
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+
+### Crear nuevo proveedor
+# @name create_provider
+POST {{DiligenciaProveedores_HostAddress}}/api/Providers
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "dto": {
+    "businessName": "Tecnología Avanzada S.A.",
+    "tradeName": "TechAvanzada",
+    "taxId": "12345678901",
+    "phoneNumber": "+1-555-123-4567",
+    "email": "contacto@techavanzada.com",
+    "website": "https://www.techavanzada.com",
+    "address": "Av. Innovación 123, Sector Tecnológico",
+    "country": "Mexico",
+    "annualBillingUSD": 2500000.00
+  }
+}
+
+###
+
+### Actualizar proveedor existente
+PUT {{DiligenciaProveedores_HostAddress}}/api/Providers/{{providerId}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "dto": {
+    "id": "{{providerId}}",
+    "businessName": "Tecnología Avanzada S.A. - Actualizada",
+    "tradeName": "TechAvanzada Plus",
+    "taxId": "12345678901",
+    "phoneNumber": "+1-555-123-4567",
+    "email": "contacto@techavanzada.com",
+    "website": "https://www.techavanzada.com",
+    "address": "Av. Innovación 456, Sector Tecnológico",
+    "country": "Mexico",
+    "annualBillingUSD": 3000000.00
+  }
+}
+
+###
+
+### Eliminar proveedor (Solo Admin)
+DELETE {{DiligenciaProveedores_HostAddress}}/api/Providers/{{providerId}}
+Authorization: Bearer {{token}}
+
+
+#####################################
+### 🔍 ENDPOINTS DE PRUEBA
+#####################################
+
+### Probar endpoint sin autenticación (debería fallar)
+GET {{DiligenciaProveedores_HostAddress}}/api/Providers
+Accept: application/json
+
+###
+
+### Probar con token inválido (debería fallar)
+GET {{DiligenciaProveedores_HostAddress}}/api/Providers
+Accept: application/json
+Authorization: Bearer token_invalido
+
+###
+
+### Probar creación con datos inválidos
+POST {{DiligenciaProveedores_HostAddress}}/api/Providers
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "dto": {
+    "businessName": "",
+    "tradeName": "",
+    "taxId": "",
+    "phoneNumber": "",
+    "email": "email_invalido",
+    "website": "",
+    "address": "",
+    "country": "",
+    "annualBillingUSD": -1000
+  }
+}
+
+###

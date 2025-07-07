@@ -1,0 +1,43 @@
+# Visual Studio
+.vs/
+.vscode/
+*.user
+*.suo
+*.sln.docstates
+
+# NuGet Packages
+*.nupkg
+# NuGet Symbol Packages
+*.snupkg
+# The packages folder can be ignored because of Package Restore
+**/[Pp]ackages/*
+# except build/, which is used as an MSBuild target.
+!**/[Pp]ackages/build/
+
+# Python Tools for Visual Studio (PTVS)
+__pycache__/
+*.pyc
+
+# Thumbnails
+._*
+
+# Folder config file
+[Dd]esktop.ini
+
+## Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Variables de entorno
+.env
+*.env
+.env.local
+.env.development.local
+.env.production.local
+
+# Archivos de configuración con datos sensibles
+appsettings.local.json
+appsettings.*.local.json
