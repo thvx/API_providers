@@ -1,130 +1,238 @@
 # 🏢 Diligencia Proveedores API
 
-API REST para la gestión de proveedores y cruce con listas de riesgo.
+## 📖 Descripción general
 
-## 🚀 Tecnologías
+API REST desarrollada para la gestión integral de proveedores. Esta aplicación permite realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sobre proveedores empresariales, manteniendo un registro de información corporativa y financiera.
 
-- **Backend**: ASP.NET Core 9.0
-- **Base de datos**: SQL Server
-- **ORM**: Entity Framework Core
-- **Autenticación**: JWT Bearer
-- **Arquitectura**: Clean Architecture con MediatR
-- **Servidor**: Kestrel
+### Características principales:
+- ✅ **Gestión completa de proveedores** con información detallada
+- ✅ **Autenticación y autorización** mediante JWT Bearer tokens
+- ✅ **Documentación automática** con Swagger/OpenAPI
+- ✅ **Base de datos** con Entity Framework Core
+- ✅ **Validación de datos** y manejo de errores
 
-## 📋 Prerequisitos
+### Casos de uso:
+- Registro y mantenimiento de información de proveedores
+- Consulta de datos empresariales y financieros
+- Validación de identidad fiscal y datos corporativos
+- Gestión de roles y permisos de usuario
 
-- .NET 9.0 SDK
-- SQL Server (LocalDB, Express, o completo)
-- Visual Studio 2022 o VS Code
+## 🚀 Tecnologías empleadas
 
-## ⚙️ Configuración
+| Categoría | Tecnología | Versión | Descripción |
+|-----------|------------|---------|-------------|
+| **Framework** | ASP.NET Core | 9.0 | Framework web multiplataforma |
+| **Lenguaje** | C# | 12.0 | Lenguaje de programación principal |
+| **Base de datos** | SQL Server | 2019+ | Sistema de gestión de base de datos |
+| **ORM** | Entity Framework Core | 9.0 | Mapeo objeto-relacional |
+| **Autenticación** | JWT Bearer | - | Tokens de autenticación |
+| **Mapeo** | AutoMapper | 15.0 | Mapeo entre objetos |
+| **Documentación** | Swagger/OpenAPI | 9.0 | Documentación automática de API |
+| **Servidor** | Kestrel | - | Servidor web de alto rendimiento |
 
-### 1. Clonar el repositorio
-```bash
-git clone https://github.com/tu-usuario/DiligenciaProveedores.git
-cd DiligenciaProveedores
+### Dependencias principales:
+```xml
+<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.6" />
+<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.6" />
+<PackageReference Include="MediatR" Version="13.0.0" />
+<PackageReference Include="AutoMapper" Version="15.0.0" />
+<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.1" />
 ```
 
-### 2. Configurar variables de entorno
-```bash
-# Copiar el template de variables de entorno
-cp .env.template .env
+## 📚 Tabla de Endpoints
 
-# Editar .env con tus valores reales
-# Asegúrate de cambiar:
-# - La cadena de conexión a tu base de datos
-# - La clave JWT por una segura
-```
+### 🔐 Autenticación
 
-### 3. Restaurar paquetes
-```bash
-dotnet restore
-```
+| Método | Endpoint | Descripción | Autenticación | Roles |
+|--------|----------|-------------|---------------|-------|
+| `POST` | `/api/Auth/login` | Iniciar sesión y obtener token JWT | ❌ No requerida | - |
 
-### 4. Configurar base de datos
-```bash
-# Crear migraciones
-dotnet ef migrations add InitialCreate
-
-# Aplicar migraciones
-dotnet ef database update
-```
-
-### 5. Ejecutar la aplicación
-```bash
-dotnet run
-```
-
-## 🔗 URLs
-
-- **API**: http://localhost:5003
-- **Swagger**: http://localhost:5003/swagger
-- **HTTPS**: https://localhost:7220
-
-## 🔐 Autenticación
-
-La API usa JWT Bearer tokens. Para obtener un token:
-
-```bash
-POST /api/Auth/login
+**Ejemplo de request:**
+```json
 {
   "username": "admin",
   "password": "password123"
 }
 ```
 
-## 📚 Endpoints
+**Ejemplo de response:**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "expiration": "2025-07-07T15:30:00Z"
+}
+```
 
-### Proveedores
-- `GET /api/Providers` - Obtener todos los proveedores
-- `GET /api/Providers/{id}` - Obtener proveedor por ID
-- `POST /api/Providers` - Crear nuevo proveedor
-- `PUT /api/Providers/{id}` - Actualizar proveedor
-- `DELETE /api/Providers/{id}` - Eliminar proveedor
+### 🏢 Gestión de Proveedores
 
-### Autenticación
-- `POST /api/Auth/login` - Iniciar sesión
+| Método | Endpoint | Descripción | Autenticación | Roles |
+|--------|----------|-------------|---------------|-------|
+| `GET` | `/api/Providers` | Obtener lista de todos los proveedores | ✅ JWT Required | User, Admin |
+| `GET` | `/api/Providers/{id}` | Obtener proveedor por ID específico | ✅ JWT Required | User, Admin |
+| `POST` | `/api/Providers` | Crear un nuevo proveedor | ✅ JWT Required | User, Admin |
+| `PUT` | `/api/Providers/{id}` | Actualizar proveedor existente | ✅ JWT Required | User, Admin |
+| `DELETE` | `/api/Providers/{id}` | Eliminar proveedor | ✅ JWT Required | Admin |
 
-## 🗂️ Estructura del proyecto
+#### Modelo de datos - Proveedor:
+
+```json
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "businessName": "Tecnología Avanzada S.A.",
+  "tradeName": "TechAvanzada",
+  "taxId": "12345678901",
+  "phoneNumber": "+1-555-123-4567",
+  "email": "contacto@techavanzada.com",
+  "website": "https://www.techavanzada.com",
+  "address": "Av. Innovación 123, Sector Tecnológico",
+  "country": "Mexico",
+  "annualBillingUSD": 2500000.00,
+  "lastModified": "2025-07-07T10:30:00Z"
+}
+```
+
+## ⚙️ Configuración para despliegue local
+
+### 📋 Prerequisitos
+
+Antes de comenzar, asegúrate de tener instalado:
+
+- **.NET 9.0 SDK**
+- **SQL Server 2019** o superior (LocalDB, Express, Developer, o Standard)
+
+### 📁 Paso 1: Clonar y preparar el proyecto
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/thvx/API_providers.git
+
+# Restaurar dependencias de NuGet
+dotnet restore
+
+# Verificar que compila correctamente
+dotnet build
+```
+
+### 🗄️ Paso 2: Configurar SQL Server
+
+```bash
+# Verificar que el servicio está ejecutándose
+net start mssqlserver
+
+# Verificar conexión
+sqlcmd -S localhost -E -Q "SELECT @@SERVERNAME"
+```
+
+### 🔐 Paso 3: Configurar variables de entorno
+
+```bash
+# Copiar plantilla de configuración
+copy .env.template .env
+
+# Editar archivo .env con valores reales
+notepad .env
+```
+
+**Contenido del archivo `.env`:**
+
+```env
+# Base de datos - LocalDB
+ConnectionStrings__DefaultConnection=Server=(localdb)\MSSQLLocalDB;Database=db_diligency;Trusted_Connection=true;TrustServerCertificate=true;MultipleActiveResultSets=true;
+
+# Base de datos - SQL Server completo (alternativa)
+# ConnectionStrings__DefaultConnection=Server=localhost;Database=db_diligency;Trusted_Connection=true;TrustServerCertificate=true;MultipleActiveResultSets=true;
+
+# Base de datos - Con autenticación SQL (alternativa)
+# ConnectionStrings__DefaultConnection=Server=localhost;Database=db_diligency;User Id=tu_usuario;Password=tu_password;TrustServerCertificate=true;MultipleActiveResultSets=true;
+
+# JWT Configuration
+Jwt__Key=CLAVE_SECRETA_MINIMO_32_CARACTERES_PARA_SEGURIDAD
+Jwt__Issuer=DiligenciaProveedoresAPI
+Jwt__Audience=DiligenciaProveedoresFrontend
+
+# Entorno
+ASPNETCORE_ENVIRONMENT=Development
+```
+
+### 🏗️ Paso 5: Configurar Entity Framework y base de datos
+
+```bash
+# Instalar herramientas de Entity Framework (si no están instaladas)
+dotnet tool install --global dotnet-ef
+
+# Verificar instalación
+dotnet ef --version
+
+# Crear migración inicial
+dotnet ef migrations add InitialCreate
+
+# Crear base de datos y aplicar migraciones
+dotnet ef database update
+
+# Verificar que se creó la base de datos
+sqlcmd -S "(localdb)\MSSQLLocalDB" -E -Q "SELECT name FROM sys.databases WHERE name = 'db_diligency'"
+```
+
+### 🚀 Paso 6: Ejecutar la aplicación
+
+```bash
+# Ejecutar en modo desarrollo
+dotnet run
+
+```
+
+**La aplicación estará disponible en:**
+- **HTTP**: http://localhost:5003
+- **HTTPS**: https://localhost:7220
+- **Swagger**: http://localhost:5003/swagger
+
+### ✅ Paso 7: Verificar funcionamiento
+
+#### A. Verificar Swagger
+1. Abrir navegador en: http://localhost:5003/swagger
+2. Deberías ver la documentación de la API
+
+#### B. Probar autenticación
+```bash
+curl -X POST "http://localhost:5003/api/Auth/login" \
+  -H "Content-Type: application/json" \
+  -d "{\"username\":\"admin\",\"password\":\"password123\"}"
+```
+
+#### C. Probar endpoints de proveedores
+```bash
+# Usar el token obtenido del paso anterior
+curl -X GET "http://localhost:5003/api/Providers" \
+  -H "Authorization: Bearer TU_TOKEN_JWT_AQUI"
+```
+
+### 📝 Estructura de archivos del proyecto
 
 ```
 DiligenciaProveedores/
-├── Application/           # Lógica de aplicación (DTOs, Commands, Queries)
-├── Domain/               # Entidades y enums de dominio
-├── Persistence/          # Contexto de base de datos y repositorios
-├── Presentation/         # Controladores y extensiones
-├── Properties/           # Configuración de launch
-└── Scripts/             # Scripts SQL para seeding
+├── 📁 Application/              # Lógica de aplicación
+│   ├── 📁 DTOs/                # Objetos de transferencia de datos
+│   ├── 📁 Providers/
+│   │   ├── 📁 Commands/        # Comandos (Create, Update, Delete)
+│   │   ├── 📁 Queries/         # Consultas (GetAll, GetById)
+│   │   └── 📁 Handlers/        # Manejadores de MediatR
+├── 📁 Domain/                   # Entidades de dominio
+│   ├── 📁 Entities/            # Entidades principales
+│   ├── 📁 Enums/               # Enumeraciones
+│   └── 📁 Interfaces/          # Contratos/Interfaces
+├── 📁 Persistence/              # Acceso a datos
+│   ├── 📁 Contexts/            # DbContext de Entity Framework
+│   ├── 📁 Configurations/      # Configuración de entidades
+│   ├── 📁 Migrations/          # Migraciones de base de datos
+│   └── 📁 Repositories/        # Implementación de repositorios
+├── 📁 Presentation/             # Capa de presentación
+│   ├── 📁 Controllers/         # Controladores de API
+│   ├── 📁 Extensions/          # Extensiones de configuración
+│   └── 📁 Middlewares/         # Middlewares personalizados
+├── 📁 Properties/               # Configuración de launch
+├── 📁 Scripts/                  # Script SQL para cargar datos iniciales
+├── 📄 appsettings.json         # Configuración de aplicación
+├── 📄 .env.template            # Plantilla de variables de entorno
+├── 📄 .gitignore               # Archivos ignorados por Git
+└── 📄 README.md                # Este archivo
 ```
-
-## 🔧 Variables de entorno
-
-Crea un archivo `.env` basado en `.env.template` con:
-
-```env
-# Base de datos
-ConnectionStrings__DefaultConnection=Server=TU_SERVIDOR;Database=TU_DB;...
-
-# JWT
-Jwt__Key=TU_CLAVE_JWT_SECRETA_MINIMO_32_CARACTERES
-Jwt__Issuer=DiligenciaProveedoresAPI
-Jwt__Audience=DiligenciaProveedoresFrontend
-```
-
-## 📝 Notas de desarrollo
-
-- El archivo `.env` contiene información sensible y NO debe subirse a git
-- La key JWT debe tener mínimo 32 caracteres para HMAC-SHA256
-- En producción, usa variables de entorno del sistema en lugar de archivos .env
-
-## 🤝 Contribuir
-
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
-
-## 📄 Licencia
-
-Este proyecto está licenciado bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para más detalles.
