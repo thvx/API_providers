@@ -41,3 +41,4 @@ __pycache__/
 # Archivos de configuración con datos sensibles
 appsettings.local.json
 appsettings.*.local.json
+appsettings.json
